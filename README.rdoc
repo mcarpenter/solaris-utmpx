@@ -1,0 +1,34 @@
+
+= solaris-utmpx
+
+Author:: Martin Carpenter
+Email:: mcarpenter@free.fr
+Copyright:: Copyright (c) Martin Carpenter 2013
+
+== About
+The solaris-utmpx gem helps with the reading and writing of Solaris
+binary utmpx(4) and wtmpx(4) files.
+
+== Examples
+
+=== Read and display all records in wtmpx
+
+    require 'solaris/utmpx'
+
+    io = File.open('/var/adm/wtmpx', 'r')
+    reader = Solaris::Wtmpx.new(:endian => :little)
+    while !io.eof? do
+      puts reader.read(io)
+    end
+
+=== Filter all root entries from wtmpx
+
+    require 'solaris/utmpx'
+
+    io = File.open('/var/adm/wtmpx', 'r')
+    reader = Solaris::Wtmpx.new(:endian => :little)
+    while !io.eof? do
+      record = reader.read(io)
+      print record.to_binary_s unless record.ut_user == 'root'
+    end
+
